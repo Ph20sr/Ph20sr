@@ -232,11 +232,13 @@ function contributionsCard() {
 // ---------- Card 2: whoami.svg ----------
 // Emblema de morcego desenhado aqui mesmo (oval com o morcego recortado).
 // Meia asa direita; a esquerda é o espelho dela.
-const BAT_HALF = 'M100 80 L105 80 L110 60 L114 82 C122 84 128 78 131 68 C150 62 172 66 188 84 '
-  + 'C180 90 174 100 172 113 C163 103 151 103 145 114 C139 103 127 103 121 114 C114 124 107 131 100 140 Z';
+const BAT_HALF = 'M100 78 L104 78 L108.5 60 L112 81 C119 83 124 79 126 70 C143 69 166 74 190 92 '
+  + 'C181 97 176 106 176 117 C168 104 157 104 150 118 C142 106 132 106 126 121 C117 129 107 136 100 152 Z';
+// Borda branca (vira caracteres densos) + miolo cinza (caracteres médios) = oval com contorno
 const EMBLEM_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 200 200">
   <rect width="200" height="200" fill="#000"/>
-  <ellipse cx="100" cy="100" rx="96" ry="66" fill="#fff"/>
+  <ellipse cx="100" cy="100" rx="97" ry="63" fill="#fff"/>
+  <ellipse cx="100" cy="100" rx="91" ry="57" fill="#bbb"/>
   <g fill="#000"><path d="${BAT_HALF}"/><path d="${BAT_HALF}" transform="translate(200 0) scale(-1 1)"/></g>
 </svg>`;
 
@@ -263,12 +265,26 @@ async function asciiEmblem(cols, rows) {
 async function whoamiCard() {
   const width = 860;
   const height = 430;
-  const cols = 70;
-  const rows = 35;
-  const lineH = 8.6;
+  const cols = 84;
+  const rows = 42;
+  const fontSize = 6.6;
+  const lineH = 7.3;
   const art = await asciiEmblem(cols, rows);
-  const artX = 20 + (360 - cols * 4.8) / 2; // 8px monoespaçado ≈ 4.8px por caractere
-  const artText = art.map((l, i) => `<tspan x="${artX}" dy="${i === 0 ? 0 : lineH}">${esc(l)}</tspan>`).join('');
+  const artX = 20 + (360 - cols * fontSize * 0.6) / 2; // monoespaçada ≈ 0.6em por caractere
+  // Duas tonalidades: borda (@ %) em amarelo claro, miolo em amarelo escuro
+  const shade = (ch) => ('@%'.includes(ch) ? 'b' : ch === ' ' ? 's' : 'm');
+  const artText = art.map((line, i) => {
+    let runs = '';
+    for (let j = 0; j < line.length;) {
+      let k = j;
+      while (k < line.length && shade(line[k]) === shade(line[j])) k++;
+      const chunk = esc(line.slice(j, k));
+      const kind = shade(line[j]);
+      runs += kind === 's' ? chunk : `<tspan fill="${kind === 'b' ? '#ffe066' : '#d9a514'}">${chunk}</tspan>`;
+      j = k;
+    }
+    return `<tspan x="${artX}" dy="${i === 0 ? 0 : lineH}">${runs}</tspan>`;
+  }).join('');
 
   const boxes = [
     ['streak atual', `${current}`, current === 1 ? 'dia' : 'dias'],
@@ -320,7 +336,7 @@ async function whoamiCard() {
 
   const body = `${prompt(20, 64, 'whoami')}
     <rect x="20" y="84" width="360" height="326" rx="8" fill="${C.panel}" stroke="${C.border}"/>
-    <text y="${84 + (326 - rows * lineH) / 2 + 7}" font-size="8" fill="#e3b341" class="fade" style="fill:#e3b341;animation-delay:.15s;white-space:pre" xml:space="preserve">${artText}</text>
+    <text y="${84 + (326 - rows * lineH) / 2 + 6}" font-size="${fontSize}" font-weight="700" fill="#e3b341" class="fade" style="fill:#e3b341;animation-delay:.15s;white-space:pre" xml:space="preserve">${artText}</text>
     ${grid}
     <text x="${bx}" y="${chartY - 10}" font-size="11" class="muted">contribuições por semana (últimas ${weekly.length})</text>
     <g class="fade" style="animation-delay:.7s">${bars}</g>
