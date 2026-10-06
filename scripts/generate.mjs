@@ -1,7 +1,6 @@
 // Gera os cards em SVG do README do perfil (estilo terminal).
 // Uso: GITHUB_TOKEN=... node scripts/generate.mjs [login]
 import { mkdir, writeFile } from 'node:fs/promises';
-import sharp from 'sharp';
 
 const LOGIN = process.argv[2] ?? process.env.GH_LOGIN ?? 'Ph20sr';
 const TOKEN = process.env.GITHUB_TOKEN;
@@ -64,22 +63,40 @@ function streaks(list) {
 
 const { current, longest } = streaks(days);
 const total = calendar.totalContributions;
-const activeDays = days.filter((d) => d.contributionCount > 0).length;
-const best = days.reduce((a, b) => (b.contributionCount > a.contributionCount ? b : a), days[0]);
-const stars = user.repositories.nodes.reduce((s, r) => s + r.stargazerCount, 0);
-const weekly = weeks.slice(-16).map((w) => w.contributionDays.reduce((s, d) => s + d.contributionCount, 0));
+// O calendário traz semanas completas (até 371 dias); as métricas usam os últimos 365
+const year = days.slice(-365);
+const activeDays = year.filter((d) => d.contributionCount > 0).length;
+const best = year.reduce((a, b) => (b.contributionCount > a.contributionCount ? b : a), year[0]);
+const perActiveDay = activeDays ? Math.round((total / activeDays) * 10) / 10 : 0;
 
+const WEEKDAYS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+const byWeekday = Array(7).fill(0);
+for (const d of year) byWeekday[new Date(`${d.date}T12:00:00Z`).getUTCDay()] += d.contributionCount;
+const topWeekday = byWeekday.indexOf(Math.max(...byWeekday));
+
+// Contribuições por mês (últimos 12 meses)
+const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const monthTotals = new Map();
+for (const d of year) monthTotals.set(d.date.slice(0, 7), (monthTotals.get(d.date.slice(0, 7)) ?? 0) + d.contributionCount);
+const monthly = [...monthTotals.entries()].slice(-12)
+  .map(([ym, n]) => ({ label: MONTHS[Number(ym.slice(5)) - 1], n }));
+
+// Linguagens: cada projeto pesa igual (um repositório antigo e grande não
+// distorce o retrato do que você usa hoje)
+const projects = user.repositories.nodes.filter((r) => r.languages.edges.length);
 const langTotals = new Map();
-for (const repo of user.repositories.nodes) {
+for (const repo of projects) {
+  const repoSize = repo.languages.edges.reduce((s, e) => s + e.size, 0) || 1;
   for (const { size, node } of repo.languages.edges) {
-    const cur = langTotals.get(node.name) ?? { size: 0, color: node.color ?? C.muted };
-    cur.size += size;
+    const cur = langTotals.get(node.name) ?? { share: 0, color: node.color ?? C.muted };
+    cur.share += size / repoSize;
     langTotals.set(node.name, cur);
   }
 }
-const langSum = [...langTotals.values()].reduce((s, l) => s + l.size, 0) || 1;
-const langs = [...langTotals.entries()].sort((a, b) => b[1].size - a[1].size).slice(0, 5)
-  .map(([name, l]) => ({ name, color: l.color, pct: l.size / langSum }));
+const langSum = [...langTotals.values()].reduce((s, l) => s + l.share, 0) || 1;
+const langs = [...langTotals.entries()].sort((a, b) => b[1].share - a[1].share).slice(0, 5)
+  .map(([name, l]) => ({ name, color: l.color, pct: l.share / langSum }));
+const publicProjects = projects.length;
 
 // ---------- Moldura de terminal ----------
 function terminal({ width, height, title, body }) {
@@ -166,24 +183,29 @@ function petTour(grid, cell) {
       keyTimes="${cum.map((_, i) => +(i / (n - 1)).toFixed(5)).join(';')}"
       keyPoints="${cum.map((c) => +(c / total).toFixed(5)).join(';')}"/>`;
   }
+  // Morceguinho: bate as asas, pisca e voa de quadrado em quadrado
+  const wing = 'M-2 -11 C-6 -15.5 -11.5 -16.5 -16 -13 C-14.2 -11 -13.8 -9 -14.4 -6.6 C-12.2 -8.2 -10 -8.2 -8.4 -6.6 C-7.2 -8.6 -5 -9.6 -2 -8.4 Z';
+  const flap = `<animateTransform attributeName="transform" type="rotate" values="16 -2 -10;-24 -2 -10;16 -2 -10" dur=".34s" repeatCount="indefinite"/>`;
+  const blink = `<animate attributeName="ry" values="1.3;1.3;.2;1.3" keyTimes="0;.9;.95;1" dur="3.3s" repeatCount="indefinite"/>`;
   const pet = `
   <g transform="translate(${x0} ${y0})"><g>${motion}
-    <ellipse cx="0" cy="1" rx="6" ry="1.6" fill="#000" opacity=".45">
-      <animate attributeName="rx" values="6;3.5;6" dur="${HOP}s" repeatCount="indefinite"/>
+    <ellipse cx="0" cy="1.5" rx="6" ry="1.5" fill="#000" opacity=".4">
+      <animate attributeName="rx" values="6;3.8;6" dur="${HOP}s" repeatCount="indefinite"/>
     </ellipse>
     <g>
-      <animateTransform attributeName="transform" type="translate" values="0 0;0 -9;0 0" keyTimes="0;.5;1"
+      <animateTransform attributeName="transform" type="translate" values="0 -3;0 -10;0 -3" keyTimes="0;.5;1"
         calcMode="spline" keySplines=".3 0 .7 1;.3 0 .7 1" dur="${HOP}s" repeatCount="indefinite"/>
-      <rect x="-8" y="-15" width="16" height="14" rx="6" fill="#a371f7" stroke="#d2a8ff" stroke-width="1"/>
-      <path d="M-2 -15 Q0 -20 3 -18" stroke="#d2a8ff" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <circle cx="3.4" cy="-18.4" r="1.4" fill="#ffa657"/>
-      <g fill="#fff">
-        <ellipse cx="-3.2" cy="-9" rx="2.2" ry="2.6"><animate attributeName="ry" values="2.6;2.6;.3;2.6" keyTimes="0;.92;.96;1" dur="3.7s" repeatCount="indefinite"/></ellipse>
-        <ellipse cx="3.2" cy="-9" rx="2.2" ry="2.6"><animate attributeName="ry" values="2.6;2.6;.3;2.6" keyTimes="0;.92;.96;1" dur="3.7s" repeatCount="indefinite"/></ellipse>
+      <g fill="#8957e5" stroke="#b392f0" stroke-width=".6" stroke-linejoin="round">
+        <g><path d="${wing}"/>${flap}</g>
+        <g transform="scale(-1 1)"><g><path d="${wing}"/>${flap}</g></g>
       </g>
-      <circle cx="-2.6" cy="-8.6" r="1.1" fill="#0d1117"/><circle cx="3.8" cy="-8.6" r="1.1" fill="#0d1117"/>
-      <ellipse cx="-5.6" cy="-5.2" rx="1.4" ry=".8" fill="#ff7b9c" opacity=".75"/>
-      <ellipse cx="5.6" cy="-5.2" rx="1.4" ry=".8" fill="#ff7b9c" opacity=".75"/>
+      <path d="M-3.6 -12.4 L-2.7 -16.6 L-1 -13.2 Z M3.6 -12.4 L2.7 -16.6 L1 -13.2 Z" fill="#6e40c9"/>
+      <ellipse cx="0" cy="-9" rx="4.3" ry="5.1" fill="#6e40c9"/>
+      <ellipse cx="0" cy="-7.4" rx="2.6" ry="3" fill="#8957e5"/>
+      <ellipse cx="-1.7" cy="-10.6" rx="1.25" ry="1.3" fill="#ffd33d">${blink}</ellipse>
+      <ellipse cx="1.7" cy="-10.6" rx="1.25" ry="1.3" fill="#ffd33d">${blink}</ellipse>
+      <circle cx="-1.5" cy="-10.5" r=".5" fill="#0d1117"/><circle cx="1.9" cy="-10.5" r=".5" fill="#0d1117"/>
+      <path d="M-1 -7.9 L-.6 -6.8 L-.2 -7.9 Z M.2 -7.9 L.6 -6.8 L1 -7.9 Z" fill="#fff"/>
     </g>
   </g></g>`;
   return { cells, pet };
@@ -230,69 +252,44 @@ function contributionsCard() {
 }
 
 // ---------- Card 2: whoami.svg ----------
-// Emblema de morcego desenhado aqui mesmo (oval com o morcego recortado).
-// Meia asa direita; a esquerda é o espelho dela.
-const BAT_HALF = 'M100 78 L104 78 L108.5 60 L112 81 C119 83 124 79 126 70 C143 69 166 74 190 92 '
-  + 'C181 97 176 106 176 117 C168 104 157 104 150 118 C142 106 132 106 126 121 C117 129 107 136 100 152 Z';
-// Borda branca (vira caracteres densos) + miolo cinza (caracteres médios) = oval com contorno
-const EMBLEM_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#000"/>
-  <ellipse cx="100" cy="100" rx="97" ry="63" fill="#fff"/>
-  <ellipse cx="100" cy="100" rx="91" ry="57" fill="#bbb"/>
-  <g fill="#000"><path d="${BAT_HALF}"/><path d="${BAT_HALF}" transform="translate(200 0) scale(-1 1)"/></g>
-</svg>`;
+// Símbolo de morcego vetorial (desenho próprio). Meia asa direita; a
+// esquerda é o espelho dela. Coordenadas num quadro de 200×110.
+const BAT_HALF = 'M100 31 L104.5 31 L108.5 15 L112 34 C117 37 121 34 123 27 C140 20 163 21 190 35 '
+  + 'C180 42 176 52 178 64 C169 55 157 55 151 66 C144 57 132 57 127 70 C117 76 108 82 100 96 Z';
 
-async function asciiEmblem(cols, rows) {
-  // 'fill' estica o quadrado para cols×rows: como cada caractere é ~2x mais
-  // alto que largo, isso compensa a proporção e o emblema não fica achatado.
-  const { data } = await sharp(Buffer.from(EMBLEM_SVG))
-    .resize(cols, rows, { fit: 'fill' })
-    .grayscale().raw().toBuffer({ resolveWithObject: true });
-  // Oval = caracteres densos; morcego e fundo = espaço; bordas suavizadas = intermediários
-  const ramp = ' .:-=+*#%@';
-  const lines = [];
-  for (let y = 0; y < rows; y++) {
-    let line = '';
-    for (let x = 0; x < cols; x++) {
-      const v = data[y * cols + x] / 255;
-      line += ramp[Math.min(ramp.length - 1, Math.floor(v * ramp.length))];
-    }
-    lines.push(line);
-  }
-  return lines;
+function emblem(x, y, scale) {
+  const shape = `<path d="${BAT_HALF}"/><path d="${BAT_HALF}" transform="translate(200 0) scale(-1 1)"/>`;
+  return `
+    <defs>
+      <linearGradient id="batFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffe680"/><stop offset="1" stop-color="#e3a008"/>
+      </linearGradient>
+      <radialGradient id="batHalo" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#e3a008" stop-opacity=".18"/><stop offset="1" stop-color="#e3a008" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="batGlow" x="-25%" y="-40%" width="150%" height="180%"><feGaussianBlur stdDeviation="4"/></filter>
+    </defs>
+    <ellipse cx="${x + 100 * scale}" cy="${y + 55 * scale}" rx="${130 * scale}" ry="${80 * scale}" fill="url(#batHalo)"/>
+    <g transform="translate(${x} ${y}) scale(${scale})">
+      <g fill="#ffd33d" filter="url(#batGlow)" opacity=".55">${shape}
+        <animate attributeName="opacity" values=".35;.75;.35" dur="4s" repeatCount="indefinite"/>
+      </g>
+      <g fill="url(#batFill)">${shape}</g>
+    </g>`;
 }
 
 async function whoamiCard() {
   const width = 860;
   const height = 430;
-  const cols = 84;
-  const rows = 42;
-  const fontSize = 6.6;
-  const lineH = 7.3;
-  const art = await asciiEmblem(cols, rows);
-  const artX = 20 + (360 - cols * fontSize * 0.6) / 2; // monoespaçada ≈ 0.6em por caractere
-  // Duas tonalidades: borda (@ %) em amarelo claro, miolo em amarelo escuro
-  const shade = (ch) => ('@%'.includes(ch) ? 'b' : ch === ' ' ? 's' : 'm');
-  const artText = art.map((line, i) => {
-    let runs = '';
-    for (let j = 0; j < line.length;) {
-      let k = j;
-      while (k < line.length && shade(line[k]) === shade(line[j])) k++;
-      const chunk = esc(line.slice(j, k));
-      const kind = shade(line[j]);
-      runs += kind === 's' ? chunk : `<tspan fill="${kind === 'b' ? '#ffe066' : '#d9a514'}">${chunk}</tspan>`;
-      j = k;
-    }
-    return `<tspan x="${artX}" dy="${i === 0 ? 0 : lineH}">${runs}</tspan>`;
-  }).join('');
+  const pctYear = Math.round((activeDays / 365) * 100);
 
   const boxes = [
-    ['streak atual', `${current}`, current === 1 ? 'dia' : 'dias'],
+    ['contribuições', fmt(total), `≈ ${perActiveDay} por dia ativo`],
+    ['streak atual', `${current}`, current === 1 ? 'dia seguido' : 'dias seguidos'],
     ['maior streak', `${longest}`, longest === 1 ? 'dia' : 'dias'],
-    ['contribuições', fmt(total), 'no último ano'],
-    ['dias ativos', `${activeDays}`, `de ${days.length}`],
-    ['melhor dia', `${best.contributionCount}`, best.date.split('-').reverse().slice(0, 2).join('/')],
-    ['repos públicos', `${user.repositories.totalCount}`, `${stars} ★`],
+    ['dias ativos', `${activeDays}`, `${pctYear}% do ano`],
+    ['dia mais ativo', WEEKDAYS[topWeekday], `${byWeekday[topWeekday]} contribuições`],
+    ['projetos', `${publicProjects}`, 'open source'],
   ];
   const bx = 400;
   const bw = 140;
@@ -300,27 +297,34 @@ async function whoamiCard() {
   const grid = boxes.map(([label, value, sub], i) => {
     const x = bx + (i % 3) * (bw + 10);
     const y = 84 + Math.floor(i / 3) * (bh + 10);
+    const size = String(value).length > 6 ? 18 : 22;
     return `<g class="fade" style="animation-delay:${0.2 + i * 0.08}s">
       <rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="8" fill="${C.panel}" stroke="${C.border}"/>
       <text x="${x + 12}" y="${y + 20}" font-size="11" class="muted">${esc(label)}</text>
-      <text x="${x + 12}" y="${y + 44}" font-size="22" font-weight="700" class="green">${esc(value)}</text>
+      <text x="${x + 12}" y="${y + 44}" font-size="${size}" font-weight="700" class="green">${esc(value)}</text>
       <text x="${x + 12}" y="${y + 60}" font-size="10" class="muted">${esc(sub)}</text>
     </g>`;
   }).join('');
 
-  const chartY = 282;
-  const chartH = 58;
-  const maxWeek = Math.max(1, ...weekly);
-  const barW = (bw * 3 + 20) / weekly.length - 6;
-  const bars = weekly.map((v, i) => {
-    const h = Math.max(2, (v / maxWeek) * chartH);
-    const x = bx + i * (barW + 6);
-    return `<rect x="${x}" y="${chartY + chartH - h}" width="${barW}" height="${h}" rx="2" fill="${v ? C.levels[Math.min(4, 1 + Math.floor((v / maxWeek) * 3.99))] : C.levels[0]}"><title>${v}</title></rect>`;
+  // Contribuições por mês (12 meses)
+  const chartTop = 272;
+  const chartH = 50;
+  const inner = bw * 3 + 20;
+  const maxMonth = Math.max(1, ...monthly.map((m) => m.n));
+  const slot = inner / monthly.length;
+  const bars = monthly.map((m, i) => {
+    const h = m.n ? Math.max(3, (m.n / maxMonth) * chartH) : 2;
+    const x = bx + i * slot + 3;
+    const w = slot - 6;
+    const level = m.n ? C.levels[Math.min(4, 1 + Math.floor((m.n / maxMonth) * 3.99))] : C.levels[0];
+    const value = m.n ? `<text x="${x + w / 2}" y="${chartTop + chartH - h - 4}" font-size="9" text-anchor="middle" class="muted">${m.n}</text>` : '';
+    return `<rect x="${x}" y="${chartTop + chartH - h}" width="${w}" height="${h}" rx="2" fill="${level}"><title>${m.label}: ${m.n}</title></rect>${value}`
+      + `<text x="${x + w / 2}" y="${chartTop + chartH + 13}" font-size="9" text-anchor="middle" class="muted">${m.label}</text>`;
   }).join('');
 
   let lx = bx;
   const langBar = langs.map((l) => {
-    const w = Math.max(3, l.pct * (bw * 3 + 20));
+    const w = Math.max(3, l.pct * inner);
     const r = `<rect x="${lx}" y="372" width="${w}" height="8" fill="${l.color}"/>`;
     lx += w;
     return r;
@@ -331,17 +335,20 @@ async function whoamiCard() {
     const pct = `${Math.max(1, Math.round(l.pct * 100))}%`;
     const out = `<circle cx="${legendX + 5}" cy="398" r="4" fill="${l.color}"/><text x="${legendX + 14}" y="402" font-size="11">${esc(l.name)} <tspan class="muted">${pct}</tspan></text>`;
     legendX += 14 + (l.name.length + 1 + pct.length) * 6.6 + 16;
-    return legendX <= bx + bw * 3 + 20 ? out : '';
+    return legendX <= bx + inner ? out : '';
   }).join('');
 
   const body = `${prompt(20, 64, 'whoami')}
     <rect x="20" y="84" width="360" height="326" rx="8" fill="${C.panel}" stroke="${C.border}"/>
-    <text y="${84 + (326 - rows * lineH) / 2 + 6}" font-size="${fontSize}" font-weight="700" fill="#e3b341" class="fade" style="fill:#e3b341;animation-delay:.15s;white-space:pre" xml:space="preserve">${artText}</text>
+    <g class="fade" style="animation-delay:.15s">${emblem(50, 112, 1.5)}</g>
+    <text x="200" y="330" font-size="13" text-anchor="middle" xml:space="preserve"><tspan class="green">&gt;</tspan> desenvolvedor full stack</text>
+    <text x="200" y="352" font-size="12" text-anchor="middle" class="muted">sites · CRMs · cobrança recorrente</text>
+    <text x="200" y="384" font-size="11" text-anchor="middle" class="muted" xml:space="preserve">vynex systems  ·  brasil</text>
     ${grid}
-    <text x="${bx}" y="${chartY - 10}" font-size="11" class="muted">contribuições por semana (últimas ${weekly.length})</text>
+    <text x="${bx}" y="${chartTop - 10}" font-size="11" class="muted">contribuições por mês</text>
     <g class="fade" style="animation-delay:.7s">${bars}</g>
-    <clipPath id="lang"><rect x="${bx}" y="372" width="${bw * 3 + 20}" height="8" rx="4"/></clipPath>
-    <text x="${bx}" y="362" font-size="11" class="muted">linguagens (repos públicos)</text>
+    <clipPath id="lang"><rect x="${bx}" y="372" width="${inner}" height="8" rx="4"/></clipPath>
+    <text x="${bx}" y="362" font-size="11" class="muted">linguagens (cada projeto com o mesmo peso)</text>
     <g clip-path="url(#lang)">${langBar}</g>
     ${langLabels}`;
   return terminal({ width, height, title: `${LOGIN.toLowerCase()}@github: ~`, body });
