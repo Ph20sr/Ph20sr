@@ -37,7 +37,7 @@
     </g><g class="fade" style="animation-delay:0.44s">
       <rect x="400" y="164" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>
       <text x="412" y="184" font-size="11" class="muted">dias ativos</text>
-      <text x="412" y="208" font-size="22" font-weight="700" class="green">24</text>
+      <text x="412" y="208" font-size="22" font-weight="700" class="green">23</text>
       <text x="412" y="224" font-size="10" class="muted">de 367</text>
     </g><g class="fade" style="animation-delay:0.52s">
       <rect x="550" y="164" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>

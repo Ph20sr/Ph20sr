@@ -108,6 +108,87 @@ function terminal({ width, height, title, body }) {
 const prompt = (x, y, cmd, delay = 0) => `<text x="${x}" y="${y}" font-size="14" class="fade" style="animation-delay:${delay}s" xml:space="preserve">`
   + `<tspan class="green">${esc(LOGIN.toLowerCase())}@github</tspan><tspan class="muted"> ~ </tspan><tspan class="blue">$</tspan> ${esc(cmd)}</text>`;
 
+// ---------- Mascote: passeia pelos dias com contribuição ----------
+const HOP = 0.6; // segundos por pulo
+const MAX_STOPS = 60;
+
+/** keyTimes/values estritamente crescentes entre 0 e 1 (exigência do SMIL). */
+function timeline(points) {
+  const sorted = points
+    .map(([t, v]) => [Math.min(1, Math.max(0, t)), v])
+    .sort((a, b) => a[0] - b[0])
+    .filter((p, i, arr) => i === 0 || p[0] > arr[i - 1][0] + 1e-6);
+  if (sorted[0][0] !== 0) sorted.unshift([0, sorted[0][1]]);
+  if (sorted.at(-1)[0] !== 1) sorted.push([1, sorted.at(-1)[1]]);
+  return {
+    keyTimes: sorted.map(([t]) => +t.toFixed(5)).join(';'),
+    values: sorted.map(([, v]) => v).join(';'),
+  };
+}
+
+function petTour(grid, cell) {
+  // Paradas: dias com contribuição em ordem cronológica (os mais recentes, se forem muitos)
+  const stops = grid.filter((d) => d.contributionCount > 0).slice(-MAX_STOPS);
+  const visitAt = new Map();
+  const n = stops.length;
+  const dur = Math.max(1, n - 1) * HOP;
+
+  stops.forEach((s, i) => visitAt.set(s.date, n > 1 ? i / (n - 1) : 0));
+
+  const cells = grid.map((d) => {
+    let glow = '';
+    if (visitAt.has(d.date) && n > 1) {
+      const t = visitAt.get(d.date);
+      const step = 1 / (n - 1);
+      const { keyTimes, values } = timeline([
+        [0, d.fill], [t - step * 0.05, d.fill], [t, '#7ee787'], [t + step * 0.9, d.fill], [1, d.fill],
+      ]);
+      glow = `<animate attributeName="fill" dur="${dur}s" repeatCount="indefinite" keyTimes="${keyTimes}" values="${values}"/>`;
+    }
+    return `<rect x="${d.x}" y="${d.y}" width="${cell}" height="${cell}" rx="2.5" fill="${d.fill}">${glow}<title>${d.date}: ${d.contributionCount}</title></rect>`;
+  }).join('');
+
+  if (n === 0) return { cells, pet: '' };
+
+  // Centro de cada célula; o mascote "pisa" no meio do quadrado
+  const pts = stops.map((s) => [s.x + cell / 2, s.y + cell / 2 + 1]);
+  const [x0, y0] = pts[0];
+  // Caminho relativo à primeira parada: sem suporte a animação, o mascote
+  // fica parado ali em vez de sumir na origem do SVG.
+  const path = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x - x0} ${y - y0}`).join(' ');
+  let motion = '';
+  if (n > 1) {
+    // keyPoints proporcionais ao comprimento, para cada pulo durar o mesmo tempo
+    const cum = [0];
+    for (let i = 1; i < n; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    const total = cum.at(-1) || 1;
+    motion = `<animateMotion dur="${dur}s" repeatCount="indefinite" calcMode="linear" path="${path}"
+      keyTimes="${cum.map((_, i) => +(i / (n - 1)).toFixed(5)).join(';')}"
+      keyPoints="${cum.map((c) => +(c / total).toFixed(5)).join(';')}"/>`;
+  }
+  const pet = `
+  <g transform="translate(${x0} ${y0})"><g>${motion}
+    <ellipse cx="0" cy="1" rx="6" ry="1.6" fill="#000" opacity=".45">
+      <animate attributeName="rx" values="6;3.5;6" dur="${HOP}s" repeatCount="indefinite"/>
+    </ellipse>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 -9;0 0" keyTimes="0;.5;1"
+        calcMode="spline" keySplines=".3 0 .7 1;.3 0 .7 1" dur="${HOP}s" repeatCount="indefinite"/>
+      <rect x="-8" y="-15" width="16" height="14" rx="6" fill="#a371f7" stroke="#d2a8ff" stroke-width="1"/>
+      <path d="M-2 -15 Q0 -20 3 -18" stroke="#d2a8ff" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <circle cx="3.4" cy="-18.4" r="1.4" fill="#ffa657"/>
+      <g fill="#fff">
+        <ellipse cx="-3.2" cy="-9" rx="2.2" ry="2.6"><animate attributeName="ry" values="2.6;2.6;.3;2.6" keyTimes="0;.92;.96;1" dur="3.7s" repeatCount="indefinite"/></ellipse>
+        <ellipse cx="3.2" cy="-9" rx="2.2" ry="2.6"><animate attributeName="ry" values="2.6;2.6;.3;2.6" keyTimes="0;.92;.96;1" dur="3.7s" repeatCount="indefinite"/></ellipse>
+      </g>
+      <circle cx="-2.6" cy="-8.6" r="1.1" fill="#0d1117"/><circle cx="3.8" cy="-8.6" r="1.1" fill="#0d1117"/>
+      <ellipse cx="-5.6" cy="-5.2" rx="1.4" ry=".8" fill="#ff7b9c" opacity=".75"/>
+      <ellipse cx="5.6" cy="-5.2" rx="1.4" ry=".8" fill="#ff7b9c" opacity=".75"/>
+    </g>
+  </g></g>`;
+  return { cells, pet };
+}
+
 // ---------- Card 1: contributions.svg ----------
 function contributionsCard() {
   const cell = 12;
@@ -115,7 +196,7 @@ function contributionsCard() {
   const left = 52;
   const top = 96;
   const width = left + weeks.length * (cell + gap) + 30;
-  let cells = '';
+  const grid = [];
   let months = '';
   let lastMonth = -1;
   weeks.forEach((week, wi) => {
@@ -123,7 +204,7 @@ function contributionsCard() {
     week.contributionDays.forEach((d) => {
       const dow = new Date(`${d.date}T12:00:00Z`).getUTCDay();
       const lvl = LEVEL[d.contributionLevel] ?? 0;
-      cells += `<rect x="${x}" y="${top + dow * (cell + gap)}" width="${cell}" height="${cell}" rx="2.5" fill="${C.levels[lvl]}"><title>${d.date}: ${d.contributionCount}</title></rect>`;
+      grid.push({ ...d, x, y: top + dow * (cell + gap), fill: C.levels[lvl] });
     });
     const month = new Date(`${week.contributionDays[0].date}T12:00:00Z`).getUTCMonth();
     if (month !== lastMonth && wi < weeks.length - 2) {
@@ -138,8 +219,10 @@ function contributionsCard() {
     + C.levels.map((c, i) => `<rect x="${legendX + i * (cell + 3)}" y="${top + 7 * (cell + gap) + 20}" width="${cell}" height="${cell}" rx="2.5" fill="${c}"/>`).join('')
     + `<text x="${legendX + 5 * (cell + 3) + 6}" y="${top + 7 * (cell + gap) + 30}" font-size="11" class="muted">mais</text>`;
 
+  const { cells, pet } = petTour(grid, cell);
+
   const body = `${prompt(20, 64, './contributions.sh')}
-    ${months}${dayLabels}<g class="fade" style="animation-delay:.25s">${cells}</g>
+    ${months}${dayLabels}<g class="fade" style="animation-delay:.25s">${cells}</g>${pet}
     <text x="${left}" y="${top + 7 * (cell + gap) + 30}" font-size="13" class="fade" style="animation-delay:.5s"><tspan class="green" font-weight="700">${fmt(total)}</tspan> contribuições no último ano</text>
     ${legend}
     <text x="20" y="${top + 7 * (cell + gap) + 64}" font-size="14" xml:space="preserve"><tspan class="green">${esc(LOGIN.toLowerCase())}@github</tspan><tspan class="muted"> ~ </tspan><tspan class="blue">$</tspan> <tspan class="cursor">▋</tspan></text>`;
