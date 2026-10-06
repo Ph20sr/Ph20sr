@@ -22,8 +22,8 @@
     <g class="fade" style="animation-delay:0.2s">
       <rect x="400" y="84" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>
       <text x="412" y="104" font-size="11" class="muted">streak atual</text>
-      <text x="412" y="128" font-size="22" font-weight="700" class="green">1</text>
-      <text x="412" y="144" font-size="10" class="muted">dia</text>
+      <text x="412" y="128" font-size="22" font-weight="700" class="green">2</text>
+      <text x="412" y="144" font-size="10" class="muted">dias</text>
     </g><g class="fade" style="animation-delay:0.28s">
       <rect x="550" y="84" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>
       <text x="562" y="104" font-size="11" class="muted">maior streak</text>
@@ -32,12 +32,12 @@
     </g><g class="fade" style="animation-delay:0.36s">
       <rect x="700" y="84" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>
       <text x="712" y="104" font-size="11" class="muted">contribuições</text>
-      <text x="712" y="128" font-size="22" font-weight="700" class="green">291</text>
+      <text x="712" y="128" font-size="22" font-weight="700" class="green">298</text>
       <text x="712" y="144" font-size="10" class="muted">no último ano</text>
     </g><g class="fade" style="animation-delay:0.44s">
       <rect x="400" y="164" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>
       <text x="412" y="184" font-size="11" class="muted">dias ativos</text>
-      <text x="412" y="208" font-size="22" font-weight="700" class="green">22</text>
+      <text x="412" y="208" font-size="22" font-weight="700" class="green">24</text>
       <text x="412" y="224" font-size="10" class="muted">de 367</text>
     </g><g class="fade" style="animation-delay:0.52s">
       <rect x="550" y="164" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>
@@ -47,13 +47,13 @@
     </g><g class="fade" style="animation-delay:0.6000000000000001s">
       <rect x="700" y="164" width="140" height="70" rx="8" fill="#010409" stroke="#30363d"/>
       <text x="712" y="184" font-size="11" class="muted">repos públicos</text>
-      <text x="712" y="208" font-size="22" font-weight="700" class="green">12</text>
+      <text x="712" y="208" font-size="22" font-weight="700" class="green">15</text>
       <text x="712" y="224" font-size="10" class="muted">0 ★</text>
     </g>
     <text x="400" y="272" font-size="11" class="muted">contribuições por semana (últimas 16)</text>
-    <g class="fade" style="animation-delay:.7s"><rect x="400" y="338" width="21.5" height="2" rx="2" fill="#0e4429"><title>1</title></rect><rect x="427.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="455" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="482.5" y="337.6326530612245" width="21.5" height="2.36734693877551" rx="2" fill="#0e4429"><title>2</title></rect><rect x="510" y="335.265306122449" width="21.5" height="4.73469387755102" rx="2" fill="#0e4429"><title>4</title></rect><rect x="537.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="565" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="592.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="620" y="332.8979591836735" width="21.5" height="7.1020408163265305" rx="2" fill="#0e4429"><title>6</title></rect><rect x="647.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="675" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="702.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="730" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="757.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="785" y="282" width="21.5" height="58" rx="2" fill="#39d353"><title>49</title></rect><rect x="812.5" y="282" width="21.5" height="58" rx="2" fill="#39d353"><title>49</title></rect></g>
+    <g class="fade" style="animation-delay:.7s"><rect x="400" y="338" width="21.5" height="2" rx="2" fill="#0e4429"><title>1</title></rect><rect x="427.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="455" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="482.5" y="337.92857142857144" width="21.5" height="2.071428571428571" rx="2" fill="#0e4429"><title>2</title></rect><rect x="510" y="335.85714285714283" width="21.5" height="4.142857142857142" rx="2" fill="#0e4429"><title>4</title></rect><rect x="537.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="565" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="592.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="620" y="333.7857142857143" width="21.5" height="6.2142857142857135" rx="2" fill="#0e4429"><title>6</title></rect><rect x="647.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="675" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="702.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="730" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="757.5" y="338" width="21.5" height="2" rx="2" fill="#161b22"><title>0</title></rect><rect x="785" y="289.25" width="21.5" height="50.75" rx="2" fill="#39d353"><title>49</title></rect><rect x="812.5" y="282" width="21.5" height="58" rx="2" fill="#39d353"><title>56</title></rect></g>
     <clipPath id="lang"><rect x="400" y="372" width="440" height="8" rx="4"/></clipPath>
     <text x="400" y="362" font-size="11" class="muted">linguagens (repos públicos)</text>
-    <g clip-path="url(#lang)"><rect x="400" y="372" width="276.692360921747" height="8" fill="#dea584"/><rect x="676.692360921747" y="372" width="108.45797337493481" height="8" fill="#00B4AB"/><rect x="785.1503342966818" y="372" width="9.923677739453389" height="8" fill="#e34c26"/><rect x="795.0740120361352" y="372" width="8.596306116410044" height="8" fill="#f34b7d"/><rect x="803.6703181525452" y="372" width="7.4193459889310835" height="8" fill="#f1e05a"/></g>
-    <circle cx="405" cy="398" r="4" fill="#dea584"/><text x="414" y="402" font-size="11">Rust <tspan class="muted">63%</tspan></text><circle cx="487.8" cy="398" r="4" fill="#00B4AB"/><text x="496.8" y="402" font-size="11">Dart <tspan class="muted">25%</tspan></text><circle cx="570.6" cy="398" r="4" fill="#e34c26"/><text x="579.6" y="402" font-size="11">HTML <tspan class="muted">2%</tspan></text><circle cx="646.8" cy="398" r="4" fill="#f34b7d"/><text x="655.8" y="402" font-size="11">C++ <tspan class="muted">2%</tspan></text><circle cx="716.4" cy="398" r="4" fill="#f1e05a"/><text x="725.4" y="402" font-size="11">JavaScript <tspan class="muted">2%</tspan></text>
+    <g clip-path="url(#lang)"><rect x="400" y="372" width="274.85341159932995" height="8" fill="#dea584"/><rect x="674.85341159933" y="372" width="107.73714134334516" height="8" fill="#00B4AB"/><rect x="782.5905529426751" y="372" width="10.294358142986702" height="8" fill="#f1e05a"/><rect x="792.8849110856618" y="372" width="9.857723116080127" height="8" fill="#e34c26"/><rect x="802.7426342017419" y="372" width="8.53917345378286" height="8" fill="#f34b7d"/></g>
+    <circle cx="405" cy="398" r="4" fill="#dea584"/><text x="414" y="402" font-size="11">Rust <tspan class="muted">62%</tspan></text><circle cx="487.8" cy="398" r="4" fill="#00B4AB"/><text x="496.8" y="402" font-size="11">Dart <tspan class="muted">24%</tspan></text><circle cx="570.6" cy="398" r="4" fill="#f1e05a"/><text x="579.6" y="402" font-size="11">JavaScript <tspan class="muted">2%</tspan></text><circle cx="686.4" cy="398" r="4" fill="#e34c26"/><text x="695.4" y="402" font-size="11">HTML <tspan class="muted">2%</tspan></text><circle cx="762.5999999999999" cy="398" r="4" fill="#f34b7d"/><text x="771.5999999999999" y="402" font-size="11">C++ <tspan class="muted">2%</tspan></text>
 </svg>
