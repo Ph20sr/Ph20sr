@@ -49,6 +49,8 @@ ph20sr@github ~ $ ls ~/open-source
 | [**agenda-slots**](https://github.com/Ph20sr/agenda-slots) | Horários disponíveis para agendamento online: expediente, feriados, buffers e vários profissionais |
 | [**input-masks-br**](https://github.com/Ph20sr/input-masks-br) | Máscaras de CPF, CNPJ alfanumérico, telefone e R$ que não pulam o cursor |
 | [**seo-local-br**](https://github.com/Ph20sr/seo-local-br) | SEO local para pequenas empresas: JSON-LD de negócio, horário, sitemap, robots e meta tags validados |
+| [**comissoes**](https://github.com/Ph20sr/comissoes) | Comissão de vendedores para CRMs: faixas progressivas, sobre o recebido, estornos, SDR e bônus por meta |
+| [**feature-flags-js**](https://github.com/Ph20sr/feature-flags-js) | Feature flags sem servidor: rollout gradual estável, kill switch, regras e testes A/B |
 | [**lgpd-consent**](https://github.com/Ph20sr/lgpd-consent) | Banner de cookies LGPD que bloqueia scripts até o consentimento e integra com o Consent Mode do Google |
 | [**command-palette**](https://github.com/Ph20sr/command-palette) | Paleta Ctrl+K como Web Component, com busca fuzzy que ignora acentos |
 | [**php-migrate**](https://github.com/Ph20sr/php-migrate) | Migrations SQL com checksum, lock e rollback para PHP sem framework |
