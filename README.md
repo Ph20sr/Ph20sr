@@ -51,6 +51,9 @@ ph20sr@github ~ $ ls ~/open-source
 | [**seo-local-br**](https://github.com/Ph20sr/seo-local-br) | SEO local para pequenas empresas: JSON-LD de negócio, horário, sitemap, robots e meta tags validados |
 | [**comissoes**](https://github.com/Ph20sr/comissoes) | Comissão de vendedores para CRMs: faixas progressivas, sobre o recebido, estornos, SDR e bônus por meta |
 | [**feature-flags-js**](https://github.com/Ph20sr/feature-flags-js) | Feature flags sem servidor: rollout gradual estável, kill switch, regras e testes A/B |
+| [**parcelas-br**](https://github.com/Ph20sr/parcelas-br) | Parcelamento para checkout: sem juros até N vezes, Price, SAC, repasse da taxa do cartão e centavos que fecham |
+| [**contatos-dedup**](https://github.com/Ph20sr/contatos-dedup) | Encontra e mescla contatos duplicados no CRM: Gmail com ponto, telefone com ou sem 9, CPF e nomes parecidos |
+| [**lead-scoring**](https://github.com/Ph20sr/lead-scoring) | Pontuação de leads: perfil × engajamento (A1–D4), interesse que esfria com o tempo e motivo de cada ponto |
 | [**lgpd-consent**](https://github.com/Ph20sr/lgpd-consent) | Banner de cookies LGPD que bloqueia scripts até o consentimento e integra com o Consent Mode do Google |
 | [**command-palette**](https://github.com/Ph20sr/command-palette) | Paleta Ctrl+K como Web Component, com busca fuzzy que ignora acentos |
 | [**php-migrate**](https://github.com/Ph20sr/php-migrate) | Migrations SQL com checksum, lock e rollback para PHP sem framework |
