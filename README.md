@@ -34,11 +34,14 @@ ph20sr@github ~ $ ls ~/open-source
 | [**whatsapp-cloud-php**](https://github.com/Ph20sr/whatsapp-cloud-php) | Cliente da API oficial do WhatsApp: templates, botões, mídia e webhook com assinatura verificada |
 | [**webhook-relay**](https://github.com/Ph20sr/webhook-relay) | Recebe webhooks (Asaas, WhatsApp, GitHub), guarda em SQLite e reenvia com retentativas e idempotência |
 | [**brasil-utils**](https://github.com/Ph20sr/brasil-utils) | CPF, **CNPJ alfanumérico (2026)**, telefone, CEP e R$, sem dependências |
+| [**csv-import-br**](https://github.com/Ph20sr/csv-import-br) | Importa planilhas do Excel brasileiro para CRMs: encoding, `;`, R$, datas, CPF/CNPJ e erros linha a linha |
 | [**cep-cache**](https://github.com/Ph20sr/cep-cache) | Consulta de CEP com cache e troca automática entre ViaCEP, BrasilAPI e OpenCEP quando uma cai |
 | [**status-page**](https://github.com/Ph20sr/status-page) | Página de status com 90 dias de histórico, 100% no GitHub Actions · [ao vivo](https://ph20sr.github.io/status-page/) |
 | [**sla-uteis**](https://github.com/Ph20sr/sla-uteis) | Prazo de SLA em horário comercial com feriados brasileiros, pausas e status |
 | [**pipeline-crm**](https://github.com/Ph20sr/pipeline-crm) | Funil de vendas kanban com previsão ponderada e alerta de negócio parado · [demo](https://ph20sr.github.io/pipeline-crm/) |
 | [**lead-widget**](https://github.com/Ph20sr/lead-widget) | Captura de leads em uma tag `<script>`: UTMs, LGPD, anti-spam e fallback para WhatsApp |
+| [**api-keys-php**](https://github.com/Ph20sr/api-keys-php) | Chaves de API no padrão GitHub/Stripe: só o hash salvo, checksum, escopos, revogação e rotação |
+| [**rate-limit-php**](https://github.com/Ph20sr/rate-limit-php) | Limite de requisições (token bucket) para APIs PHP em MySQL/SQLite, sem Redis |
 | [**audit-log-php**](https://github.com/Ph20sr/audit-log-php) | Log de auditoria à prova de adulteração: diff, dados sensíveis mascarados e cadeia de hashes |
 | [**agenda-slots**](https://github.com/Ph20sr/agenda-slots) | Horários disponíveis para agendamento online: expediente, feriados, buffers e vários profissionais |
 | [**input-masks-br**](https://github.com/Ph20sr/input-masks-br) | Máscaras de CPF, CNPJ alfanumérico, telefone e R$ que não pulam o cursor |
