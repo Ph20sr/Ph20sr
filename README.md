@@ -27,6 +27,8 @@ ph20sr@github ~ $ ls ~/open-source
 | [**asaas-php**](https://github.com/Ph20sr/asaas-php) | SDK PHP do Asaas: Pix, boleto, assinaturas, webhooks idempotentes e retries que nunca duplicam cobrança |
 | [**pix-brcode**](https://github.com/Ph20sr/pix-brcode) | Gera e lê o Pix copia e cola (BR Code), idêntico ao exemplo do manual do Banco Central, sem dependências |
 | [**boleto-utils**](https://github.com/Ph20sr/boleto-utils) | Valida linha digitável, converte para código de barras e extrai valor e vencimento (com o novo fator de 2025) |
+| [**regua-cobranca**](https://github.com/Ph20sr/regua-cobranca) | Régua de cobrança: lembretes, avisos e suspensão em dias úteis, sem mensagem duplicada |
+| [**saas-metrics**](https://github.com/Ph20sr/saas-metrics) | MRR, churn, NRR, LTV e retenção por safra a partir do histórico de assinaturas |
 | [**whatsapp-cloud-php**](https://github.com/Ph20sr/whatsapp-cloud-php) | Cliente da API oficial do WhatsApp: templates, botões, mídia e webhook com assinatura verificada |
 | [**webhook-relay**](https://github.com/Ph20sr/webhook-relay) | Recebe webhooks (Asaas, WhatsApp, GitHub), guarda em SQLite e reenvia com retentativas e idempotência |
 | [**brasil-utils**](https://github.com/Ph20sr/brasil-utils) | CPF, **CNPJ alfanumérico (2026)**, telefone, CEP e R$, sem dependências |
@@ -35,6 +37,8 @@ ph20sr@github ~ $ ls ~/open-source
 | [**sla-uteis**](https://github.com/Ph20sr/sla-uteis) | Prazo de SLA em horário comercial com feriados brasileiros, pausas e status |
 | [**pipeline-crm**](https://github.com/Ph20sr/pipeline-crm) | Funil de vendas kanban com previsão ponderada e alerta de negócio parado · [demo](https://ph20sr.github.io/pipeline-crm/) |
 | [**lead-widget**](https://github.com/Ph20sr/lead-widget) | Captura de leads em uma tag `<script>`: UTMs, LGPD, anti-spam e fallback para WhatsApp |
+| [**audit-log-php**](https://github.com/Ph20sr/audit-log-php) | Log de auditoria à prova de adulteração: diff, dados sensíveis mascarados e cadeia de hashes |
+| [**input-masks-br**](https://github.com/Ph20sr/input-masks-br) | Máscaras de CPF, CNPJ alfanumérico, telefone e R$ que não pulam o cursor |
 | [**lgpd-consent**](https://github.com/Ph20sr/lgpd-consent) | Banner de cookies LGPD que bloqueia scripts até o consentimento e integra com o Consent Mode do Google |
 | [**command-palette**](https://github.com/Ph20sr/command-palette) | Paleta Ctrl+K como Web Component, com busca fuzzy que ignora acentos |
 | [**php-migrate**](https://github.com/Ph20sr/php-migrate) | Migrations SQL com checksum, lock e rollback para PHP sem framework |
