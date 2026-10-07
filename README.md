@@ -41,6 +41,7 @@ ph20sr@github ~ $ ls ~/open-source
 | [**pipeline-crm**](https://github.com/Ph20sr/pipeline-crm) | Funil de vendas kanban com previsão ponderada e alerta de negócio parado · [demo](https://ph20sr.github.io/pipeline-crm/) |
 | [**lead-widget**](https://github.com/Ph20sr/lead-widget) | Captura de leads em uma tag `<script>`: UTMs, LGPD, anti-spam e fallback para WhatsApp |
 | [**totp-php**](https://github.com/Ph20sr/totp-php) | Autenticação em dois fatores (Google Authenticator), validada com os vetores das RFCs 4226 e 6238 |
+| [**idempotency-php**](https://github.com/Ph20sr/idempotency-php) | Idempotency-Key no padrão Stripe: pedido reenviado não cria cobrança ou cadastro duplicado |
 | [**job-queue-php**](https://github.com/Ph20sr/job-queue-php) | Fila de tarefas no próprio MySQL, sem Redis: e-mails, WhatsApp e webhooks com retentativas |
 | [**api-keys-php**](https://github.com/Ph20sr/api-keys-php) | Chaves de API no padrão GitHub/Stripe: só o hash salvo, checksum, escopos, revogação e rotação |
 | [**rate-limit-php**](https://github.com/Ph20sr/rate-limit-php) | Limite de requisições (token bucket) para APIs PHP em MySQL/SQLite, sem Redis |
