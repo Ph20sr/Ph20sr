@@ -40,11 +40,14 @@ ph20sr@github ~ $ ls ~/open-source
 | [**sla-uteis**](https://github.com/Ph20sr/sla-uteis) | Prazo de SLA em horário comercial com feriados brasileiros, pausas e status |
 | [**pipeline-crm**](https://github.com/Ph20sr/pipeline-crm) | Funil de vendas kanban com previsão ponderada e alerta de negócio parado · [demo](https://ph20sr.github.io/pipeline-crm/) |
 | [**lead-widget**](https://github.com/Ph20sr/lead-widget) | Captura de leads em uma tag `<script>`: UTMs, LGPD, anti-spam e fallback para WhatsApp |
+| [**totp-php**](https://github.com/Ph20sr/totp-php) | Autenticação em dois fatores (Google Authenticator), validada com os vetores das RFCs 4226 e 6238 |
+| [**job-queue-php**](https://github.com/Ph20sr/job-queue-php) | Fila de tarefas no próprio MySQL, sem Redis: e-mails, WhatsApp e webhooks com retentativas |
 | [**api-keys-php**](https://github.com/Ph20sr/api-keys-php) | Chaves de API no padrão GitHub/Stripe: só o hash salvo, checksum, escopos, revogação e rotação |
 | [**rate-limit-php**](https://github.com/Ph20sr/rate-limit-php) | Limite de requisições (token bucket) para APIs PHP em MySQL/SQLite, sem Redis |
 | [**audit-log-php**](https://github.com/Ph20sr/audit-log-php) | Log de auditoria à prova de adulteração: diff, dados sensíveis mascarados e cadeia de hashes |
 | [**agenda-slots**](https://github.com/Ph20sr/agenda-slots) | Horários disponíveis para agendamento online: expediente, feriados, buffers e vários profissionais |
 | [**input-masks-br**](https://github.com/Ph20sr/input-masks-br) | Máscaras de CPF, CNPJ alfanumérico, telefone e R$ que não pulam o cursor |
+| [**seo-local-br**](https://github.com/Ph20sr/seo-local-br) | SEO local para pequenas empresas: JSON-LD de negócio, horário, sitemap, robots e meta tags validados |
 | [**lgpd-consent**](https://github.com/Ph20sr/lgpd-consent) | Banner de cookies LGPD que bloqueia scripts até o consentimento e integra com o Consent Mode do Google |
 | [**command-palette**](https://github.com/Ph20sr/command-palette) | Paleta Ctrl+K como Web Component, com busca fuzzy que ignora acentos |
 | [**php-migrate**](https://github.com/Ph20sr/php-migrate) | Migrations SQL com checksum, lock e rollback para PHP sem framework |
